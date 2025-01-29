@@ -2,8 +2,10 @@ package com.bezkoder.spring.security.jwt.models;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 public class Role {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,6 +14,9 @@ public class Role {
   @Enumerated(EnumType.STRING)
   @Column(length = 20)
   private ERole name;
+
+  @OneToMany(mappedBy = "role")
+  private Set<User> users;
 
   public Role() {
 

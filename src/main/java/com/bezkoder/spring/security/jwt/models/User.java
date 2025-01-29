@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "users",
+@Table(name = "user",
        uniqueConstraints = {
            @UniqueConstraint(columnNames = "username"),
            @UniqueConstraint(columnNames = "email")
@@ -28,15 +28,19 @@ public class User {
   @Email
   private String email;
 
+  // TODO install SpringBoot DevTools for auto refresh
+  // TODO change User-Role relation to ManyToOne
+  // TODO verify refreshToken storage
+  // TODO verify GrantAuthorities and Role assigment
+  // TODO change ENUMS by removing "ROLE_" prefix
+
   @NotBlank
   @Size(max = 120)
   private String password;
 
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "user_roles", 
-             joinColumns = @JoinColumn(name = "user_id"),
-             inverseJoinColumns = @JoinColumn(name = "role_id"))
-  private Set<Role> roles = new HashSet<>();
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name="role_id")
+  private Role role;
 
   public User() {
   }
@@ -79,11 +83,11 @@ public class User {
     this.password = password;
   }
 
-  public Set<Role> getRoles() {
-    return roles;
+  public Role getRole() {
+    return role;
   }
 
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
+  public void setRole(Role role) {
+    this.role = role;
   }
 }
