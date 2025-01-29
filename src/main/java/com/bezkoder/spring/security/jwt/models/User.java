@@ -28,8 +28,6 @@ public class User {
   @Email
   private String email;
 
-  // TODO install SpringBoot DevTools for auto refresh
-  // TODO change User-Role relation to ManyToOne
   // TODO verify refreshToken storage
   // TODO verify GrantAuthorities and Role assigment
   // TODO change ENUMS by removing "ROLE_" prefix
