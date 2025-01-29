@@ -1,5 +1,6 @@
 package com.bezkoder.spring.security.jwt.security.services;
 
+import java.sql.Ref;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,15 +31,17 @@ public class RefreshTokenService {
   }
 
   public RefreshToken createRefreshToken(Long userId) {
-    RefreshToken refreshToken = new RefreshToken();
+    Optional<RefreshToken> existingToken = refreshTokenRepository.findByUserId(userId);
+    existingToken.ifPresent(refreshTokenRepository::delete);
 
-    refreshToken.setUser(userRepository.findById(userId).get());
+    RefreshToken refreshToken = new RefreshToken();
+    refreshToken.setUser(userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found")));
     refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
     refreshToken.setToken(UUID.randomUUID().toString());
 
-    refreshToken = refreshTokenRepository.save(refreshToken);
-    return refreshToken;
+    return refreshTokenRepository.save(refreshToken);
   }
+
 
   public RefreshToken verifyExpiration(RefreshToken token) {
     if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
