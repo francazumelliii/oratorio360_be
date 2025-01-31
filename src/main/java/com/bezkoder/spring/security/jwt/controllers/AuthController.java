@@ -74,9 +74,8 @@ public class AuthController {
 
     ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
-    List<String> roles = userDetails.getAuthorities().stream()
-        .map(item -> item.getAuthority())
-        .collect(Collectors.toList());
+    String role = userDetails.getAuthorities().stream()
+        .map(item -> item.getAuthority()).findFirst().orElse("USER");
     
     RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
     
@@ -88,7 +87,7 @@ public class AuthController {
               .body(new UserInfoResponse(userDetails.getId(),
                                          userDetails.getUsername(),
                                          userDetails.getEmail(),
-                                         roles));
+                                         role));
   }
 
   @PostMapping("/signup")
