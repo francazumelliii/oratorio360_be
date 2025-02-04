@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -16,10 +17,13 @@ import jakarta.validation.constraints.Size;
            @UniqueConstraint(columnNames = "username"),
            @UniqueConstraint(columnNames = "email")
        })
-public class User {
+public class User extends AbstractModel{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @Column(nullable = false, unique = true)
+  private String uuid;
 
   @NotBlank
   @Size(max = 20)
@@ -71,7 +75,12 @@ public class User {
   @JoinColumn(name="role_id")
   private Role role;
 
+  // TODO add foreign keys
+
+
+
   public User() {
+    this.uuid = UUID.randomUUID().toString();
   }
 
   public User(String username, String email, String password) {
