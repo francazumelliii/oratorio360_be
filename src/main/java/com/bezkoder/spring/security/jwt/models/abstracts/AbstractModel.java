@@ -1,4 +1,4 @@
-package com.bezkoder.spring.security.jwt.models;
+package com.bezkoder.spring.security.jwt.models.abstracts;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
