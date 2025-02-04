@@ -1,5 +1,7 @@
 package com.bezkoder.spring.security.jwt.models;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +37,35 @@ public class User {
   @NotBlank
   @Size(max = 120)
   private String password;
+
+  @Column(unique = true, nullable = false)
+  private String cf;
+
+  @Column(nullable = false)
+  private String name;
+
+  @Column(nullable = false)
+  private String surname;
+
+  @Column(nullable = false)
+  private char gender;
+
+  @Column()
+  private String phone_number;
+
+  @Column(name="birthday_date", nullable = false)
+  private Date birthdayDate;
+
+  @Column(name="residence_address", nullable = false)
+  private String residenceAddress;
+
+  @Column(name="domicile_address", nullable = false)
+  private String domicileAddress;
+
+  @Column(name="pwd_updated_at")
+  private Timestamp pwdUpdatedAt;
+
+
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="role_id")
