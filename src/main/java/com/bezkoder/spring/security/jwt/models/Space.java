@@ -1,11 +1,14 @@
 package com.bezkoder.spring.security.jwt.models;
 
 
+import com.bezkoder.spring.security.jwt.models.abstracts.AbstractModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Space extends AbstractModel{
+public class Space extends AbstractModel {
     @Column(nullable = false)
     private String name;
 
@@ -27,5 +30,12 @@ public class Space extends AbstractModel{
     @Column(name="max_users")
     private Integer maxUsers;
 
-    // TODO add createdBy
+    @Column(name="banner_img")
+    private String bannerImg;
+
+    @JoinColumn(name="created_by")
+    @ManyToOne
+    private User createdBy;
+
+
 }

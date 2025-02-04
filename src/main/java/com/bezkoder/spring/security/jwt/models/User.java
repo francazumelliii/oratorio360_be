@@ -2,10 +2,11 @@ package com.bezkoder.spring.security.jwt.models;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import com.bezkoder.spring.security.jwt.models.abstracts.AbstractModel;
+import com.bezkoder.spring.security.jwt.models.embedded.EventParticipants;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -17,7 +18,7 @@ import jakarta.validation.constraints.Size;
            @UniqueConstraint(columnNames = "username"),
            @UniqueConstraint(columnNames = "email")
        })
-public class User extends AbstractModel{
+public class User extends AbstractModel {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -75,7 +76,38 @@ public class User extends AbstractModel{
   @JoinColumn(name="role_id")
   private Role role;
 
-  // TODO add foreign keys
+
+  @OneToMany(mappedBy="createdBy")
+  private Set<Space> createdSpaces;
+
+  @OneToMany(mappedBy="createdBy")
+  private Set<Event> createdEvents;
+
+  @OneToMany(mappedBy = "user")
+  private Set<EventParticipants> events;
+
+  @ManyToOne()
+  @JoinColumn(name="mother_id")
+  private User mother;
+
+  @ManyToOne()
+  @JoinColumn(name="father_id")
+  private User father;
+
+  @ManyToOne
+  @JoinColumn(name="tutor_id")
+  private User tutor;
+
+  @ManyToOne()
+  @JoinColumn(name="created_by")
+  private User createdBy;
+
+  @ManyToOne()
+  @JoinColumn(name="emergency_id")
+  private Emergency emergency;
+
+  // TODO add emergency foreign key
+  // TODO add residence town and domicile town foreign keys
 
 
 
