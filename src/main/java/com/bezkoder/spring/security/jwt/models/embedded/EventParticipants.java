@@ -14,6 +14,7 @@ public class EventParticipants extends AbstractRelation  {
     @EmbeddedId
     private EventParticipantsID id;
 
+
     @ManyToOne
     @JoinColumn(name="user_id")
     @MapsId("userId")
