@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.bezkoder.spring.security.jwt.dto.response.UserInfoResponse;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
@@ -30,7 +32,6 @@ import com.bezkoder.spring.security.jwt.models.Role;
 import com.bezkoder.spring.security.jwt.models.User;
 import com.bezkoder.spring.security.jwt.payload.request.LoginRequest;
 import com.bezkoder.spring.security.jwt.payload.request.SignupRequest;
-import com.bezkoder.spring.security.jwt.payload.response.UserInfoResponse;
 import com.bezkoder.spring.security.jwt.payload.response.MessageResponse;
 import com.bezkoder.spring.security.jwt.repository.RoleRepository;
 import com.bezkoder.spring.security.jwt.repository.UserRepository;
@@ -81,13 +82,12 @@ public class AuthController {
     
     ResponseCookie jwtRefreshCookie = jwtUtils.generateRefreshJwtCookie(refreshToken.getToken());
 
+    User user = this.userRepository.findById(userDetails.getId())
+            .orElseThrow(() -> new EntityNotFoundException("User not found"));
     return ResponseEntity.ok()
               .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
               .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
-              .body(new UserInfoResponse(userDetails.getId(),
-                                         userDetails.getUsername(),
-                                         userDetails.getEmail(),
-                                         role));
+              .body(UserInfoResponse.build(user));
   }
 
   @PostMapping("/signup")
